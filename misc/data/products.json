@@ -87,7 +87,7 @@
         "priceGold": 714,
         "priceGoldAlt": 479.194,
         "bonusAmount": 0,
-        "hasAlternateUnit": true,
+        "hasAlternateUnit": false,
         "isActive": true,
         "modified": "2016-10-27 09:53:49"
     },
