@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import loadProducts from '../services/loadProducts';
 
 export const DBProductsContext = React.createContext(
@@ -15,10 +15,8 @@ const DBProducts = ({ children }) => {
       });
   }, []);
 
- const productsStore = useMemo(() => productsList, [productsList]);
-
   return (
-    <DBProductsContext.Provider value={productsStore}>
+    <DBProductsContext.Provider value={productsList}>
       {children}
     </DBProductsContext.Provider>
   );

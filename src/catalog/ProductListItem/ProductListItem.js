@@ -1,14 +1,18 @@
-import React, { useContext } from 'react';
-import changeQuantity from '@/utils/changeQuantity';
-import switchClasses from '@/utils/switchClasses';
+import React, { useState } from 'react';
+import ImgResize from "@/core/imgResize/imgResize";
 
-const ProductListView = ({ product }) => {
+const BY_ITEM = 'BY_ITEM';
+const BY_PACK = 'BY_PACK';
 
-  if (product === undefined) {
-    return false;
-  }
+const ProductListItem = ({ product }) => {
+  const [quantity, changeQuantity] = useState(1);
+  const [unit, changeUnit] = useState(BY_ITEM);
 
-  let srcName = (product.primaryImageUrl).slice(0,-4) + "_220x220_1.jpg";
+  const assocProducts =  (product.assocProducts).slice(0,-1) + ".";
+  const classNameForPack = `unit--select ${(unit === BY_PACK) && 'unit--active'}`;
+  const classNameForItem = `unit--select ${(unit === BY_ITEM) && 'unit--active'}`;
+  const retailPrice = (unit === BY_PACK) ? product.priceRetail : product.priceRetailAlt;
+  const goldPrice = (unit === BY_PACK) ? product.priceGold : product.priceGoldAlt;
 
   return (
     <div data-product-id={product.productId} className="product product_horizontal">
@@ -18,7 +22,7 @@ const ProductListView = ({ product }) => {
       </div>
       <div className="product_photo">
         <a href="#" className="url--link product__link">
-          <img src={srcName} />
+          {ImgResize(product.primaryImageUrl, '_220x220_1')}
         </a>
       </div>
       <div className="product_description">
@@ -26,21 +30,21 @@ const ProductListView = ({ product }) => {
       </div>
       <div className="product_tags hidden-sm">
         <p>Могут понадобиться:</p>
-        <a href="#" className="url--link">{product.assocProducts}</a>
+        <a href="#" className="url--link">{assocProducts}</a>
       </div>
       <div className="product_units">
         <div className="unit--wrapper">
-          <div className="unit--select unit--active">
-            <p className="ng-binding" onClick={(event) => switchClasses(event)}>За м. кв.</p>
+          <div className={classNameForItem}>
+            <p className="ng-binding" onClick={() => changeUnit(BY_ITEM)}>За м. кв.</p>
           </div>
-          <div className="unit--select">
-            <p className="ng-binding" onClick={(event) => switchClasses(event)}>За упаковку</p>
+          <div className={classNameForPack}>
+            <p className="ng-binding" onClick={() => changeUnit(BY_PACK)}>За упаковку</p>
           </div>
         </div>
       </div>
       <p className="product_price_club_card">
         <span className="product_price_club_card_text">По карте<br/>клуба</span>
-        <span className="goldPrice">{product.priceGold} ₽</span>
+        <span className="goldPrice">{Math.round(goldPrice)} ₽</span>
         <span className="rouble__i black__i">
               <svg version="1.0" id="rouble__b" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
                    width="30px" height="22px" viewBox="0 0 50 50"
@@ -51,7 +55,7 @@ const ProductListView = ({ product }) => {
            </span>
       </p>
       <p className="product_price_default">
-        <span className="retailPrice">{product.priceRetail} ₽</span>
+        <span className="retailPrice">{Math.round(retailPrice)} ₽</span>
         <span className="rouble__i black__i">
               <svg version="1.0" id="rouble__g" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
                    width="30px" height="22px" viewBox="0 0 50 50"
@@ -71,7 +75,7 @@ const ProductListView = ({ product }) => {
           <div className="unit--desc-t">
             <p>
               <span className="ng-binding">Продается упаковками:</span>
-              <span className="unit--infoInn">{product.unitRatio} {product.unit} = {product.unitRatioAlt} {product.unitAlt} </span>
+              <span className="unit--infoInn">{product.unitRatio} {product.unit} = {product.unitRatioAlt.toFixed(2)} {product.unitAlt} </span>
             </p>
           </div>
         </div>
@@ -79,14 +83,10 @@ const ProductListView = ({ product }) => {
       <div className="product__wrapper">
         <div className="product_count_wrapper">
           <div className="stepper">
-            <input className="product__count stepper-input" type="text" value="1"/>
-              <span className="stepper-arrow up" onClick={(event) => {
-                changeQuantity(event);
-              }}>
+            <input className="product__count stepper-input" type="text" value={quantity}/>
+              <span className="stepper-arrow up" onClick={() => changeQuantity(quantity + 1)}>
               </span>
-              <span className="stepper-arrow down" onClick={(event) => {
-                changeQuantity(event);
-              }}>
+              <span className="stepper-arrow down" onClick={() => (quantity > 0) ? changeQuantity(quantity - 1) : 0}>
             </span>
           </div>
         </div>
@@ -101,4 +101,4 @@ const ProductListView = ({ product }) => {
   );
 };
 
-export default ProductListView;
+export default ProductListItem;

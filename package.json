@@ -11,19 +11,6 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-syntax-jsx": "^7.12.1",
     "@babel/preset-react": "^7.12.10",
-    "babel": {
-      "plugins": [
-        "@babel/plugin-proposal-class-properties",
-        {
-          "loose": true
-        }
-      ],
-      "presets": [
-        "@babel/preset-env",
-        "@babel/preset-react",
-        "@babel/plugin-syntax-jsx"
-      ]
-    },
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "babel-preset-env": "^1.7.0",

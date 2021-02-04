@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { DBProductsContext } from "@/db/DBProducts";
-import ProductListView from '@/components/catalogOfProducts/ProductListView';
+
+import { DBProductsContext } from '@/db/DBProducts';
+import ProductListItem from '@/catalog/ProductListItem/ProductListItem';
 
 const ProductList = () => {
-
   const productsList = useContext(DBProductsContext);
-
   return (
     <div className="product-list">
       <main className="grid container">
@@ -14,7 +13,7 @@ const ProductList = () => {
             <div className="product__area">
               <div id="products_section">
                 <div className="products_page pg_0">
-                  {productsList && productsList.map((product) => <ProductListView key={product.productID} product={product} />)}
+                  {productsList.map((product) => <ProductListItem key={product.productID} product={product} />)}
                 </div>
               </div>
             </div>
