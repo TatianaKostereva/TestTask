@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import ImgResize from "@/core/imgResize/imgResize";
+import { connect } from 'react-redux';
+import ImgResize from '@/core/imgResize/imgResize';
+import { actionAddGood } from '@/store';
 
 const BY_ITEM = 'BY_ITEM';
 const BY_PACK = 'BY_PACK';
 
-const ProductListItem = ({ product }) => {
+const ProductListItem = ({ product, addGood, countInCart }) => {
+
   const [quantity, changeQuantity] = useState(1);
   const [unit, changeUnit] = useState(BY_ITEM);
 
@@ -50,7 +53,7 @@ const ProductListItem = ({ product }) => {
                    width="30px" height="22px" viewBox="0 0 50 50"
                    enable-background="new 0 0 50 50" xml:space="preserve">
                  <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:href="#rouble_black"></use>
+  xlink:href="#rouble_black"/>
               </svg>
            </span>
       </p>
@@ -61,17 +64,17 @@ const ProductListItem = ({ product }) => {
                    width="30px" height="22px" viewBox="0 0 50 50"
                    enable-background="new 0 0 50 50" xml:space="preserve">
                  <use xmlns:xlink="http://www.w3.org/1999/xlink"
-                      xlink:href="#rouble_gray"></use>
+  xlink:href="#rouble_gray"/>
               </svg>
            </span>
       </p>
       <div className="product_price_points">
         <p className="ng-binding">Можно купить за {product.bonusAmount} балла</p>
       </div>
-      <div className="list--unit-padd"></div>
+      <div className="list--unit-padd"/>
       <div className="list--unit-desc">
         <div className="unit--info">
-          <div className="unit--desc-i"></div>
+          <div className="unit--desc-i"/>
           <div className="unit--desc-t">
             <p>
               <span className="ng-binding">Продается упаковками:</span>
@@ -80,19 +83,20 @@ const ProductListItem = ({ product }) => {
           </div>
         </div>
       </div>
+      <div>В корзине: {countInCart || 0}</div>
       <div className="product__wrapper">
         <div className="product_count_wrapper">
           <div className="stepper">
-            <input className="product__count stepper-input" type="text" value={quantity}/>
+            <input onChange = {(e) => changeQuantity(e.target.value)} className="product__count stepper-input" type="text" value={quantity}/>
               <span className="stepper-arrow up" onClick={() => changeQuantity(quantity + 1)}>
               </span>
               <span className="stepper-arrow down" onClick={() => (quantity > 0) ? changeQuantity(quantity - 1) : 0}>
             </span>
           </div>
         </div>
-        <button className="btn btn_cart" data-url="/cart/" data-product-id={product.productId}>
+        <button onClick = {() => addGood(product.productId, quantity)} className="btn btn_cart" data-url="/cart/" data-product-id={product.productId}>
           <svg className="ic ic_cart">
-             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart"></use>
+             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cart"/>
           </svg>
           <span className="ng-binding">В корзину</span>
         </button>
@@ -101,4 +105,14 @@ const ProductListItem = ({ product }) => {
   );
 };
 
-export default ProductListItem;
+const mapStateToProps = (state, { product }) => ({
+  countInCart: state && state.card[product.productId],
+})
+
+const mapDispatchToProps = dispatch => ({
+  addGood: (id, quantity) => {
+    dispatch(actionAddGood(id, quantity));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListItem);

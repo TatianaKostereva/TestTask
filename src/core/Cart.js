@@ -10,11 +10,21 @@ const Cart = ({ children }) => {
   const deleteProduct = (id) => {
     const newProductsList = {...products};
     delete newProductsList[id];
+
+    setProducts(newProductsList);
   };
+
+  const changeQuantityProduct = (id, quantity) => {
+    const newProductsList = {...products};
+    newProductsList[id] = (newProductsList[id] || 0) + quantity;
+
+    setProducts(newProductsList);
+  }
 
   const cart = {
     cart: products,
     deleteProduct,
+    changeQuantityProduct,
   };
 
   return (

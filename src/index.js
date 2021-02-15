@@ -2,14 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import DBProducts from "@/db/DBProducts";
 import ProductList from '@/catalog/ProductList/ProductList';
-import Cart from '@/core/Cart';
+import { Provider } from 'react-redux';
+import store from '@/store';
 
 ReactDOM.render(
   (
   <DBProducts>
-    <Cart>
+    <Provider store={store}>
       <ProductList />
-    </Cart>
+    </Provider>
   </DBProducts>
   ),
   document.querySelector('#root'),
